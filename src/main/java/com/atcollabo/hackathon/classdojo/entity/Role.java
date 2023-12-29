@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ROLES")
@@ -29,7 +29,7 @@ public class Role {
     private String description;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserRole> users;
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
 
 }
