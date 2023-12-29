@@ -1,7 +1,8 @@
-package com.atcollabo.hackathon.classdojo.service;
+package com.atcollabo.hackathon.classdojo.service.impl;
 
 import com.atcollabo.hackathon.classdojo.dao.RoleDao;
 import com.atcollabo.hackathon.classdojo.entity.Role;
+import com.atcollabo.hackathon.classdojo.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
