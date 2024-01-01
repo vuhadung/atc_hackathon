@@ -20,22 +20,31 @@ import java.util.Set;
 public class User {
 
     @Id
-    @Column(name = "ID")
+    @Column(name = "USER_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USER_NAME")
+    @Column(name = "USERNAME")
     private String username;
+
+    @Column(name = "FULL_NAME")
+    private String fullname;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "PHONE_NUMBER")
+    private String phone_number;
 
     @Column(name = "PASSWORD")
     @JsonIgnore
     private String password;
 
-    @Column(name = "CREATED_DATE")
+    @Column(name = "CREATED_AT")
     @JsonIgnore
     private LocalDateTime createdDate;
 
-    @Column(name = "UPDATED_DATE", columnDefinition = "")
+    @Column(name = "UPDATED_AT", columnDefinition = "")
     @JsonIgnore
     private LocalDateTime updatedDate;
 
