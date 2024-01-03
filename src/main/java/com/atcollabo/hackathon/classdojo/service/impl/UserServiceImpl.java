@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,17 +31,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
+    @Transactional
     public User save(UserDto userDto) {
         User user = userDto.getUserFromDto();
 
-        Set<UserRole> roleSet = new HashSet<>();
         Role role = roleDao.findRoleByName("STUDENT");
-        UserRole userRole = new UserRole();
-        userRole.setUser(user);
-        userRole.setRole(role);
-        roleSet.add(userRole);
+        user.getRoles().add(role);
 
-        user.setRoles(roleSet);
         userDao.save(user);
         return user;
     }
@@ -66,7 +63,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
         user.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getRole().getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         });
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
