@@ -6,16 +6,16 @@ import lombok.Setter;
 
 @Entity
 @Getter @Setter
-@Table(name = "ATTEND")
-public class Attends {
+@Table(name = "STUDENT_CLASS")
+public class StudentClass {
 
-    @Id @GeneratedValue
-    @Column(name = "ATTENDS_ID")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "STUDENT_CLASS_ID")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "STUDENT_ID")
-    private User student;
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "CLASS_ID")
@@ -24,6 +24,6 @@ public class Attends {
     @Column(name = "SCORE")
     private int score;
 
-    @Column(name = "ATTENDANCE")
-    private int attendance;
+    @Column(name = "ATTENDANCE_SCORE")
+    private int attendanceScore;
 }

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Table(name = "ATTENDANCES")
 public class Attendance {
 
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ATTENDANCE_ID")
     private Long id;
 
@@ -19,13 +19,10 @@ public class Attendance {
     @JoinColumn(name = "CLASS_ID")
     private Class _class;
 
-    @Column(name = "TITLE")
-    private String title;
-
     @ManyToOne
     @JoinColumn(name = "TEACHER_ID")
-    private User teacher;
+    private Teacher teacher;
 
-    @Column(name = "DUE_DATE")
-    private LocalDateTime due_date;
+    @Column(name = "DATETIME")
+    private LocalDateTime datetime;
 }

@@ -13,27 +13,32 @@ import java.util.List;
 @Setter
 @Table(name = "CLASSES")
 public class Class {
-    @Id @GeneratedValue
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CLASS_ID")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "TEACHER_ID")
-    private User teacher;
+    private Teacher teacher;
 
     @Column(name = "TITLE")
     private String title;
 
     @Column(name = "CODE")
-    private String code;
+    private String code; // 10-digit or 5-digit code (all number or alphanumeric)
 
-    @OneToMany(mappedBy = "_class")
-    List<Bonus> bonuses = new ArrayList<>();
+    // Later implementation
+//    @OneToMany(mappedBy = "_class")
+//    List<Bonus> bonuses = new ArrayList<>();
 
     @OneToMany(mappedBy = "_class")
     List<Attendance> attendances = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
-    private LocalDateTime createAt;
+    private LocalDateTime createdAt;
+
+    @Column(name="STATUS")
+    @Enumerated(EnumType.STRING)
+    private ClassStatus status;
 
 }

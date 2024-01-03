@@ -13,12 +13,8 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "USERS")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@MappedSuperclass
+@Getter @Setter
 public class User {
 
     @Id
@@ -30,7 +26,7 @@ public class User {
     private String username;
 
     @Column(name = "FULL_NAME")
-    private String fullname;
+    private String fullName;
 
     @Column(name = "EMAIL")
     private String email;
@@ -38,7 +34,7 @@ public class User {
     @Column(name = "PHONE_NUMBER")
     private String phone_number;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "HASHED_PASSWORD")
     @JsonIgnore
     private String password;
 
@@ -57,5 +53,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Fetch(FetchMode.SELECT)
     private Set<Role> roles = new HashSet<>();
+
 
 }

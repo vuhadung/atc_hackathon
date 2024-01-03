@@ -9,20 +9,20 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter
-@Table(name = "CHECK_ATTENDANCE")
-public class Checks {
-    @Id @GeneratedValue
-    @Column(name = "CHECK_ID")
+@Table(name = "STUDENT_ATTENDANCE")
+public class StudentAttendance {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "STUDENT_ATTENDANCE_ID")
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "STUDENT_ID")
-    private User student;
+    private Student student;
 
     @ManyToOne
     @JoinColumn(name = "ATTENDANCE_ID")
-    private Attendance attendance;
+    private Attendance attendanceActivity;
 
-    @Column(name = "CHECKED_IN_AT")
-    private LocalDateTime checkedInAt;
+    @Column(name = "IS_PRESENT")
+    private boolean isPresent;
 }
