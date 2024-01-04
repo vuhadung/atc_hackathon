@@ -50,7 +50,6 @@ CREATE TABLE IF NOT EXISTS attendances (
                                class_id bigint DEFAULT NULL,
                                datetime datetime(6) DEFAULT NULL
 );
-alter table attendances add foreign key (teacher_id) references users(id);
 alter table attendances add foreign key (class_id) references classes(class_id);
 
 CREATE TABLE IF NOT EXISTS student_class (
