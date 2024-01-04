@@ -28,8 +28,4 @@ public class Role {
     @Column(name = "DESCRIPTION")
     private String description;
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
-
 }

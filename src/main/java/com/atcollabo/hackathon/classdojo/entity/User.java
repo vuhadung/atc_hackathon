@@ -10,15 +10,14 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name = "USERS")
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Table(name="USERS")
+@Getter @Setter
 public class User {
 
     @Id
@@ -29,15 +28,24 @@ public class User {
     @Column(name = "USER_NAME")
     private String username;
 
-    @Column(name = "PASSWORD")
+    @Column(name = "FULL_NAME")
+    private String fullName;
+
+    @Column(name = "EMAIL")
+    private String email;
+
+    @Column(name = "PHONE_NUMBER")
+    private String phone_number;
+
+    @Column(name = "HASHED_PASSWORD")
     @JsonIgnore
     private String password;
 
-    @Column(name = "CREATED_DATE")
+    @Column(name = "CREATED_AT")
     @JsonIgnore
     private LocalDateTime createdDate;
 
-    @Column(name = "UPDATED_DATE", columnDefinition = "")
+    @Column(name = "UPDATED_AT", columnDefinition = "")
     @JsonIgnore
     private LocalDateTime updatedDate;
 
@@ -48,5 +56,11 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     @Fetch(FetchMode.SELECT)
     private Set<Role> roles = new HashSet<>();
+
+    @OneToMany(mappedBy = "student")
+    private List<StudentClass> joinedClasses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Class> classes = new ArrayList<>();
 
 }

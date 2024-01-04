@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,10 +31,10 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public User save(UserDto userDto) {
+    public User save(UserDto userDto, String roleName) {
         User user = userDto.getUserFromDto();
 
-        Role role = roleDao.findRoleByName("STUDENT");
+        Role role = roleDao.findRoleByName(roleName);
         user.getRoles().add(role);
 
         userDao.save(user);
