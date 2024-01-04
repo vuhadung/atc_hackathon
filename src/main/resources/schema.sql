@@ -65,22 +65,22 @@ alter table student_attendance add foreign key (attendance_id) references attend
 alter table student_attendance add foreign key (student_id) references users(id);
 
 -- Initial data
-DELETE FROM user_role;
-DELETE FROM roles;
-DELETE FROM users;
-
-INSERT INTO roles (description, name)
-VALUES ('Admin role', 'ADMIN');
-INSERT INTO roles (description, name)
-VALUES ('Teacher role', 'TEACHER');
-INSERT INTO roles (description, name)
-VALUES ('Student role', 'STUDENT');
-
-INSERT INTO users (user_name, hashed_password, created_at, updated_at)
-VALUES ('admin',
-        '{bcrypt}$2a$10$FTbr4wRHRKwPzH3NuTMYZ.mEJKX5TKbVi77p/nApp/l408mIcLMd2',
-        current_timestamp, current_timestamp);
-INSERT INTO user_role (role_id, user_id)
-VALUES ((SELECT id FROM roles WHERE name = 'ADMIN'),
-        (SELECT id FROM users WHERE user_name = 'admin'));
+# DELETE FROM user_role;
+# DELETE FROM roles;
+# DELETE FROM users;
+#
+# INSERT INTO roles (description, name)
+# VALUES ('Admin role', 'ADMIN');
+# INSERT INTO roles (description, name)
+# VALUES ('Teacher role', 'TEACHER');
+# INSERT INTO roles (description, name)
+# VALUES ('Student role', 'STUDENT');
+#
+# INSERT INTO users (user_name, hashed_password, created_at, updated_at)
+# VALUES ('admin',
+#         '{bcrypt}$2a$10$FTbr4wRHRKwPzH3NuTMYZ.mEJKX5TKbVi77p/nApp/l408mIcLMd2',
+#         current_timestamp, current_timestamp);
+# INSERT INTO user_role (role_id, user_id)
+# VALUES ((SELECT id FROM roles WHERE name = 'ADMIN'),
+#         (SELECT id FROM users WHERE user_name = 'admin'));
 
