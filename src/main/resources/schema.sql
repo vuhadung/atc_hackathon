@@ -48,7 +48,6 @@ alter table classes add foreign key (teacher_id) references users(id);
 CREATE TABLE IF NOT EXISTS attendances (
                                attendance_id bigint primary key auto_increment,
                                class_id bigint DEFAULT NULL,
-                               teacher_id bigint DEFAULT NULL,
                                datetime datetime(6) DEFAULT NULL
 );
 alter table attendances add foreign key (teacher_id) references users(id);
