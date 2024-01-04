@@ -10,19 +10,22 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Table(name="USERS")
 @Getter @Setter
 public class User {
 
     @Id
-    @Column(name = "USER_ID")
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "USERNAME")
+    @Column(name = "USER_NAME")
     private String username;
 
     @Column(name = "FULL_NAME")
@@ -54,5 +57,10 @@ public class User {
     @Fetch(FetchMode.SELECT)
     private Set<Role> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "student")
+    private List<StudentClass> joinedClasses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "teacher")
+    private List<Class> classes = new ArrayList<>();
 
 }

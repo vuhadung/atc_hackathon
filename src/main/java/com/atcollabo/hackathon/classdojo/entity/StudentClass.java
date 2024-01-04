@@ -15,7 +15,7 @@ public class StudentClass {
 
     @ManyToOne
     @JoinColumn(name = "STUDENT_ID")
-    private Student student;
+    private User student;
 
     @ManyToOne
     @JoinColumn(name = "CLASS_ID")
