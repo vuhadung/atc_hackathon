@@ -1,3 +1,11 @@
+drop table if exists student_class cascade;
+drop table if exists student_attendance cascade;
+drop table if exists user_role cascade;
+drop table if exists attendances cascade;
+drop table if exists classes cascade;
+drop table if exists roles cascade;
+drop table if exists users cascade;
+
 create table if not exists roles
 (
     id          bigint primary key auto_increment,
@@ -65,22 +73,20 @@ alter table student_attendance add foreign key (attendance_id) references attend
 alter table student_attendance add foreign key (student_id) references users(id);
 
 -- Initial data
-# DELETE FROM user_role;
-# DELETE FROM roles;
-# DELETE FROM users;
-#
-# INSERT INTO roles (description, name)
-# VALUES ('Admin role', 'ADMIN');
-# INSERT INTO roles (description, name)
-# VALUES ('Teacher role', 'TEACHER');
-# INSERT INTO roles (description, name)
-# VALUES ('Student role', 'STUDENT');
-#
-# INSERT INTO users (user_name, hashed_password, created_at, updated_at)
-# VALUES ('admin',
-#         '{bcrypt}$2a$10$FTbr4wRHRKwPzH3NuTMYZ.mEJKX5TKbVi77p/nApp/l408mIcLMd2',
-#         current_timestamp, current_timestamp);
-# INSERT INTO user_role (role_id, user_id)
-# VALUES ((SELECT id FROM roles WHERE name = 'ADMIN'),
-#         (SELECT id FROM users WHERE user_name = 'admin'));
+INSERT INTO roles(description, name)
+SELECT * FROM (SELECT 'Admin Role', 'ADMIN') AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM roles WHERE name = 'ADMIN'
+) LIMIT 1;
 
+INSERT INTO roles(description, name)
+SELECT * FROM (SELECT 'Teacher Role', 'TEACHER') AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM roles WHERE name = 'TEACHER'
+) LIMIT 1;
+
+INSERT INTO roles(description, name)
+SELECT * FROM (SELECT 'Student Role', 'STUDENT') AS tmp
+WHERE NOT EXISTS (
+    SELECT name FROM roles WHERE name = 'STUDENT'
+) LIMIT 1;
