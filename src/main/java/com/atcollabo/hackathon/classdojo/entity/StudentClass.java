@@ -24,6 +24,4 @@ public class StudentClass {
     @Column(name = "ATTENDANCE")
     private int attendance;
 
-    @Column(name = "ATTENDATE_RATE")
-    private float attendanceRate;
 }

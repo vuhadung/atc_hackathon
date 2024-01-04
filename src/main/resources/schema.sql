@@ -57,8 +57,7 @@ CREATE TABLE IF NOT EXISTS student_class (
                         student_class_id bigint primary key auto_increment,
                         class_id bigint DEFAULT NULL,
                         student_id bigint DEFAULT NULL,
-                        attendance int DEFAULT 0,
-                        attendance_rate decimal DEFAULT NULL
+                        attendance int DEFAULT 0
 );
 alter table student_class add foreign key (class_id) references classes(class_id);
 alter table student_class add foreign key (student_id) references users(id);
