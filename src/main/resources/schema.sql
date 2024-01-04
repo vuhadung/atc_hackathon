@@ -40,7 +40,8 @@ CREATE TABLE IF NOT EXISTS classes (
                          title varchar(255) DEFAULT NULL,
                          code varchar(10) DEFAULT NULL,
                          status enum('active','inactive') DEFAULT NULL,
-                         created_at datetime(6) DEFAULT NULL
+                         created_at datetime(6) DEFAULT NULL,
+                         student_count int DEFAULT 0
 );
 alter table classes add foreign key (teacher_id) references users(id);
 
@@ -57,8 +58,8 @@ CREATE TABLE IF NOT EXISTS student_class (
                         student_class_id bigint primary key auto_increment,
                         class_id bigint DEFAULT NULL,
                         student_id bigint DEFAULT NULL,
-                        attendance int DEFAULT NULL,
-                        score int DEFAULT NULL
+                        attendance int DEFAULT 0,
+                        attendance_rate decimal DEFAULT NULL
 );
 alter table student_class add foreign key (class_id) references classes(class_id);
 alter table student_class add foreign key (student_id) references users(id);

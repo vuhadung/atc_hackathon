@@ -21,9 +21,9 @@ public class StudentClass {
     @JoinColumn(name = "CLASS_ID")
     private Class _class;
 
-    @Column(name = "SCORE")
-    private int score;
+    @Column(name = "ATTENDANCE")
+    private int attendance;
 
-    @Column(name = "ATTENDANCE_SCORE")
-    private int attendanceScore;
+    @Column(name = "ATTENDATE_RATE")
+    private float attendanceRate;
 }
