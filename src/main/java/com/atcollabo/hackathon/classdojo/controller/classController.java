@@ -76,7 +76,7 @@ public class classController {
    _class.setCode(randomCode);
 
     _class.setCreatedAt(LocalDateTime.now());
-    _class.setStatus(ClassStatus.ACTIVE);
+    _class.setStatus(ClassStatus.active);
     classService.save(_class);
     return ResponseEntity.status(HttpStatus.OK).body(_class);
 
