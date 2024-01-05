@@ -2,6 +2,7 @@ package com.atcollabo.hackathon.classdojo.controller;
 
 import com.atcollabo.hackathon.classdojo.dto.TeacherClassDto;
 import com.atcollabo.hackathon.classdojo.entity.Class;
+import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
 import com.atcollabo.hackathon.classdojo.service.TeacherService;
 import com.atcollabo.hackathon.classdojo.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,5 +45,11 @@ public class TeacherController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(teacherClassDtos);
+    }
+
+    @GetMapping(value = "teacher/classes/{classId}/students")
+    public ResponseEntity<List<StudentClass>> getStudentsInClass(@PathVariable("classId") Long classId) {
+        List<StudentClass> studentClassList = teacherService.findAllStudentForClass(classId);
+        return ResponseEntity.status(HttpStatus.OK).body(studentClassList);
     }
 }

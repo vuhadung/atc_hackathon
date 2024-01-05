@@ -1,6 +1,7 @@
 package com.atcollabo.hackathon.classdojo.service.impl;
 
 import com.atcollabo.hackathon.classdojo.entity.Class;
+import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.repository.TeacherRepository;
 import com.atcollabo.hackathon.classdojo.service.TeacherService;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public List<Class> findAllClassesByTeacherId(Long teacherId) {
         return teacherRepository.findAllClassesByTeacherId(teacherId);
+    }
+
+    @Override
+    public List<StudentClass> findAllStudentForClass(Long classId) {
+        return teacherRepository.findAllStudentInClass(classId);
     }
 }
