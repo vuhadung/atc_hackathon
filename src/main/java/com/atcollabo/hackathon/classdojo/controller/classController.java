@@ -53,11 +53,7 @@ public class classController {
       return sb.toString();
     }
 
-    public static void main(String[] args) {
-      // Sử dụng phương thức để tạo ra một mã code ngẫu nhiên
-      String randomCode = generateRandomCode();
-      System.out.println("Random Code: " + randomCode);
-    }
+
 
 
 
