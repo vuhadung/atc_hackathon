@@ -31,16 +31,17 @@ public class StudentService {
     }
 
     //? Join a class by class code
-    public void joinClass(String classCode) {
+    public void joinClass(Long studentID, String classCode) {
         // find the class by code
         Class foundClass =  classDAO.findByCode(classCode);
 
         // find the student and studentId
-
+        /*
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         User student = userService.findOne(userDetails.getUsername());
-        Long studentId = student.getId();
+        */
+        User student = studentDao.findOne(studentID);
 
         // add the found class and student to the student_class table
         StudentClass studentClass = new StudentClass();
