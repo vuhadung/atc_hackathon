@@ -23,5 +23,4 @@ public class StudentClass {
 
     @Column(name = "ATTENDANCE")
     private int attendance;
-
 }
