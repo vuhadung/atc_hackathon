@@ -31,8 +31,8 @@ public class Class {
 //    @OneToMany(mappedBy = "_class")
 //    List<Bonus> bonuses = new ArrayList<>();
 
-    @OneToMany(mappedBy = "_class")
-    List<Attendance> attendances = new ArrayList<>();
+//    @OneToMany(mappedBy = "_class")
+//    List<Attendance> attendances = new ArrayList<>();
 
     @Column(name = "CREATED_AT")
     private LocalDateTime createdAt;

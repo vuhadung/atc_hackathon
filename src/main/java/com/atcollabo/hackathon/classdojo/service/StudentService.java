@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 @Service
 public class StudentService {
-    private UserServiceImpl userService;
+    private UserService userService;
     private StudentDao studentDao;
     private StudentClassDAO studentClassDAO;
     private ClassDAO classDAO;
