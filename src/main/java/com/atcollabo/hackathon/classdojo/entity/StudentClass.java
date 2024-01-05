@@ -21,9 +21,11 @@ public class StudentClass {
     @JoinColumn(name = "CLASS_ID")
     private Class _class;
 
+/*
     @Column(name = "SCORE")
     private int score;
+ */ // Changed to attendanceScore
 
-    @Column(name = "ATTENDANCE_SCORE")
+    @Column(name = "SCORE")
     private int attendanceScore;
 }

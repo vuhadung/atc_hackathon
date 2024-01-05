@@ -3,6 +3,7 @@ package com.atcollabo.hackathon.classdojo.controller;
 import com.atcollabo.hackathon.classdojo.dto.StudentRequestDTO;
 import com.atcollabo.hackathon.classdojo.dto.StudentResponseDTO;
 import com.atcollabo.hackathon.classdojo.entity.Class;
+import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
 import com.atcollabo.hackathon.classdojo.service.StudentService;
 import com.atcollabo.hackathon.classdojo.service.UserService;
@@ -44,10 +45,11 @@ public class StudentRestController {
         UserDetails userDetails = (UserDetails) auth.getPrincipal();
         User student = userService.findOne(userDetails.getUsername());
         // call the service to join the class
-        Class joinedClass = studentService.joinClass(student.getId(), studentRequestDTO.getCode());
+        StudentClass joinedClass = studentService.joinClass(student.getId(), studentRequestDTO.getCode());
 
         // create a response DTO
-        StudentResponseDTO studentResponseDTO = mappedClassToDto(joinedClass);
+
+        StudentResponseDTO studentResponseDTO = mappedClassToDto(joinedClass.get_class());
 
         // return the response DTO
         return ResponseEntity.ok(studentResponseDTO);

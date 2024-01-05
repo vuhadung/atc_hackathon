@@ -34,7 +34,8 @@ public class StudentService {
     }
 
     //? Join a class by class code
-    public Class joinClass(Long studentID, String classCode) {
+    @Transactional(readOnly = false)
+    public StudentClass joinClass(Long studentID, String classCode) {
         // find the class by code
         Class foundClass =  classDAO.findByCode(classCode);
 
@@ -55,14 +56,14 @@ public class StudentService {
         student.getJoinedClasses().add(studentClass);
 
         // return the joined class
-        return foundClass;
+        return studentClass;
     }
 
     //? List all classes joined by a student
     public List<Class> listAllClassesJoinedByStudent(Long studentID) {
         List<StudentClass> studentClasses = studentClassDAO.findByStudentId(studentID);
 
-        // Conver StudentClasses to StudentClass
+        // Convert StudentClasses to StudentClass
         List<Class> classes = new ArrayList<>();
         for (StudentClass st : studentClasses){
             classes.add(st.get_class());
