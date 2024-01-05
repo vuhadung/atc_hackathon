@@ -33,15 +33,15 @@ public class StudentClassDAO {
 
     // findByStudentId
     public List<StudentClass> findByStudentId(Long studentId){
-        return entityManager.createQuery("select sc from StudentClass sc where sc.student = :studentId", StudentClass.class)
-                .setParameter("studentId",studentDao.findOne(studentId) )
+        return entityManager.createQuery("select sc from StudentClass sc where sc.student.id = :studentId", StudentClass.class)
+                .setParameter("studentId",studentId )
                 .getResultList();
     }
 
     // findByClassId
     public List<StudentClass> findByClassId(Long classId){
-        return entityManager.createQuery("select sc from StudentClass sc where sc._class = :classId", StudentClass.class)
-                .setParameter("classId", classDAO.findOne(classId))
+        return entityManager.createQuery("select sc from StudentClass sc where sc._class.id = :classId", StudentClass.class)
+                .setParameter("classId", classId)
                 .getResultList();
     }
 
