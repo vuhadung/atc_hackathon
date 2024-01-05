@@ -39,10 +39,10 @@ public class ClassDAO {
 
 
     // findByCode
-    public List<Class> findByCode(String code){
+    public Class findByCode(String code){
         return entityManager.createQuery("select c from Class c where c.code = :code", Class.class)
                 .setParameter("code", code)
-                .getResultList();
+                .getSingleResult();
     }
 
 
