@@ -8,6 +8,6 @@ insert into user_role (id, role_id, user_id) values (3, 2, 2);
 
 insert into classes (class_id, teacher_id, title, code, status, created_at, student_count) values (1, 2, 'Zoolab', 'Uq3dT', 'inactive', '2023-09-16 16:09:43', 42);
 insert into classes (class_id, teacher_id, title, code, status, created_at, student_count) values (2, 2, 'Vagram', 'VgUu2', 'active', '2023-03-28 10:23:09', 31);
-insert into classes (class_id, teacher_id, title, code, status, created_at, student_count) values (3, 2, 'Span', 'a5VrY', 'inactive', '2023-01-21 00:14:12', 13);
+insert into classes (class_id, teacher_id, title, code, status, created_at, student_count) values (3, 2, 'Span', 'a5VrY', 'active', '2023-01-21 00:14:12', 13);
 insert into classes (class_id, teacher_id, title, code, status, created_at, student_count) values (4, 2, 'Greenlam', 'zJXRY', 'inactive', '2023-10-18 12:13:40', 44);
 

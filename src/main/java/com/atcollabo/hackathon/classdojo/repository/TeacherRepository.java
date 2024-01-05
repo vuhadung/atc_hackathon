@@ -14,10 +14,14 @@ public class TeacherRepository {
 
     public List<Class> findAllClassesByTeacherId(Long teacherId) {
 
-        List<Class> resultList = em.createQuery("select c from Class c where c.teacher.id = :teacherId", Class.class)
+        return em.createQuery(
+                "select c " +
+                        "from Class c " +
+                        "where c.teacher.id = :teacherId and c.status='active'",
+                        Class.class
+                )
                 .setParameter("teacherId", teacherId)
                 .getResultList();
-        return resultList;
     }
 
 }

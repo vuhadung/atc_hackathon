@@ -1,6 +1,7 @@
 package com.atcollabo.hackathon.classdojo.dto;
 
 import com.atcollabo.hackathon.classdojo.entity.Class;
+import com.atcollabo.hackathon.classdojo.entity.ClassStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,8 @@ public class TeacherClassDto {
 
     private String code;
 
+    private ClassStatus status;
+
     private LocalDateTime createdAt;
 
     private int studentCount;
@@ -31,6 +34,7 @@ public class TeacherClassDto {
         this.teacherId = _class.getTeacher().getId();
         this.title = _class.getTitle();
         this.code = _class.getCode();
+        this.status = _class.getStatus();
         this.createdAt = _class.getCreatedAt();
         this.studentCount = _class.getStudentCount();
     }
