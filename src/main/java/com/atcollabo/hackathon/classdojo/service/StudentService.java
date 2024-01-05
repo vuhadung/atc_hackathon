@@ -31,7 +31,7 @@ public class StudentService {
     }
 
     //? Join a class by class code
-    public void joinClass(Long studentID, String classCode) {
+    public Class joinClass(Long studentID, String classCode) {
         // find the class by code
         Class foundClass =  classDAO.findByCode(classCode);
 
@@ -50,6 +50,9 @@ public class StudentService {
 
         // add new joined class to the User joinedClasses
         student.getJoinedClasses().add(studentClass);
+
+        // return the joined class
+        return foundClass;
     }
 
 }
