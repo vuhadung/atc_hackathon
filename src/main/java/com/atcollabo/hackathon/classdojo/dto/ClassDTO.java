@@ -9,6 +9,6 @@ import javax.validation.constraints.NotEmpty;
 public class ClassDTO {
     @NotEmpty(message = "class title is required.")
     private String title;
-    private String code;
+
 
 }

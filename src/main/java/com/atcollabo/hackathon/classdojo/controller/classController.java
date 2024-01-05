@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.security.SecureRandom;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,14 +30,39 @@ public class classController {
   private final ClassService classService;
 
 
-  /* -khi ta bấm nút "+" trên thanh task bar để hiện form tạo class
-  * - form sẽ cần có mục "title" và "code" để teacher điền thông tin của class */
-  @GetMapping("/teachers/classes")
-  public String createClassForm(Model model){
-    model.addAttribute("ClassForm", new ClassDTO());
-    return "class/ClassForm";
 
-  }
+
+
+
+    // Ký tự có thể sử dụng để tạo mã code
+    private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    // Độ dài của mã code
+    private static final int CODE_LENGTH = 8;
+
+    public static String generateRandomCode() {
+      SecureRandom random = new SecureRandom();
+      StringBuilder sb = new StringBuilder(CODE_LENGTH);
+
+      for (int i = 0; i < CODE_LENGTH; i++) {
+        int randomIndex = random.nextInt(ALLOWED_CHARACTERS.length());
+        char randomChar = ALLOWED_CHARACTERS.charAt(randomIndex);
+        sb.append(randomChar);
+      }
+
+      return sb.toString();
+    }
+
+    public static void main(String[] args) {
+      // Sử dụng phương thức để tạo ra một mã code ngẫu nhiên
+      String randomCode = generateRandomCode();
+      System.out.println("Random Code: " + randomCode);
+    }
+
+
+
+
+
 
   // sau khi bấm submit, sẽ lấy thông tin để tạo class
   @PreAuthorize("hasRole('TEACHER')")
@@ -45,12 +71,13 @@ public class classController {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     User teacher = userService.findOne(auth.getName());
+    String randomCode = generateRandomCode();
 
     Class _class = new Class();
     _class.setTeacher(teacher);
 
     _class.setTitle(classDto.getTitle());
-    _class.setCode(classDto.getCode());
+   _class.setCode(randomCode);
 
     _class.setCreatedAt(LocalDateTime.now());
     _class.setStatus(ClassStatus.ACTIVE);
