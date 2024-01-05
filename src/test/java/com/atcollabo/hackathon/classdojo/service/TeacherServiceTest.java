@@ -15,12 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class TeacherServiceTest {
 
     @Autowired private TeacherService teacherService;
-    @Autowired private TeacherRepository teacherRepository;
-
 
     @Test
     void findAllClassesByTeacherId() {
-        List<Class> allClassesByTeacherId = teacherRepository.findAllClassesByTeacherId(2L);
+        List<Class> allClassesByTeacherId = teacherService.findAllClassesByTeacherId(2L);
         int count = 2;
         assertEquals(count, allClassesByTeacherId.size());
     }
