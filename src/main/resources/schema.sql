@@ -6,6 +6,7 @@ drop table if exists classes cascade;
 drop table if exists roles cascade;
 drop table if exists users cascade;
 
+
 create table if not exists roles
 (
     id          bigint primary key auto_increment,
