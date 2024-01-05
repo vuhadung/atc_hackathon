@@ -28,8 +28,6 @@ public class TeacherRepository {
 
     public List<StudentClass> findAllStudentInClass(Long classId) {
 
-        // TODO: The teacher can only access the class which he/she is teaching
-
         return em.createQuery(
                 "SELECT sl " +
                         "FROM StudentClass sl " +
