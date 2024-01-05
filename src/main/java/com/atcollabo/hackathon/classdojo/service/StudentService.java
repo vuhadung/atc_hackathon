@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Transactional(readOnly = true)
 @Service
 public class StudentService {
@@ -53,6 +56,19 @@ public class StudentService {
 
         // return the joined class
         return foundClass;
+    }
+
+    //? List all classes joined by a student
+    public List<Class> listAllClassesJoinedByStudent(Long studentID) {
+        List<StudentClass> studentClasses = studentClassDAO.findByStudentId(studentID);
+
+        // Conver StudentClasses to StudentClass
+        List<Class> classes = new ArrayList<>();
+        for (StudentClass st : studentClasses){
+            classes.add(st.get_class());
+        }
+
+        return classes;
     }
 
 }

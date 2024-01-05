@@ -13,10 +13,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.modelmapper.ModelMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class StudentRestController {
@@ -32,6 +36,7 @@ public class StudentRestController {
         this.userService = userService;
     }
 
+    //? Join a class by class code
     @PreAuthorize("hasRole('STUDENT')")
     @PostMapping("/classes")
     public ResponseEntity<StudentResponseDTO> joinClass(@RequestBody StudentRequestDTO studentRequestDTO){
@@ -42,6 +47,36 @@ public class StudentRestController {
         Class joinedClass = studentService.joinClass(student.getId(), studentRequestDTO.getCode());
 
         // create a response DTO
+        StudentResponseDTO studentResponseDTO = mappedClassToDto(joinedClass);
+
+        // return the response DTO
+        return ResponseEntity.ok(studentResponseDTO);
+
+    }
+
+    //? Find all joined classes by student id
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping("/students/classes")
+    public ResponseEntity<List<StudentResponseDTO>> findAllJoinedClasses(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        User student = userService.findOne(userDetails.getUsername());
+        // call the service to find all joined classes by student id
+        List<Class> joinedClasses = studentService.listAllClassesJoinedByStudent(student.getId());
+
+        // create a response DTO for each joined class
+        List<StudentResponseDTO> studentResponseDTOs = new ArrayList<>();
+        for (Class joinedClass : joinedClasses) {
+            StudentResponseDTO studentResponseDTO = mappedClassToDto(joinedClass);
+            studentResponseDTOs.add(studentResponseDTO);
+        }
+
+        // return the response DTO
+        return ResponseEntity.ok(studentResponseDTOs) ;
+
+    }
+
+    private static StudentResponseDTO mappedClassToDto(Class joinedClass) {
         StudentResponseDTO studentResponseDTO = new StudentResponseDTO();
         studentResponseDTO.setClassId(joinedClass.getId());
         studentResponseDTO.setTeacherId(joinedClass.getTeacher().getId());
@@ -49,9 +84,6 @@ public class StudentRestController {
         studentResponseDTO.setCode(joinedClass.getCode());
         studentResponseDTO.setTeacherFullName(joinedClass.getTeacher().getFullName());
         studentResponseDTO.setStatus(joinedClass.getStatus());
-
-        // return the response DTO
-        return ResponseEntity.ok(studentResponseDTO);
-
+        return studentResponseDTO;
     }
 }
