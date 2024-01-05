@@ -57,7 +57,7 @@ public class User {
     @Fetch(FetchMode.SELECT)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "student")
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private List<StudentClass> joinedClasses = new ArrayList<>();
 
     @OneToMany(mappedBy = "teacher")
