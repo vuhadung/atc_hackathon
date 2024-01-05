@@ -6,6 +6,7 @@ drop table if exists classes cascade;
 drop table if exists roles cascade;
 drop table if exists users cascade;
 
+
 create table if not exists roles
 (
     id          bigint primary key auto_increment,
@@ -40,25 +41,23 @@ CREATE TABLE IF NOT EXISTS classes (
                          title varchar(255) DEFAULT NULL,
                          code varchar(10) DEFAULT NULL,
                          status enum('active','inactive') DEFAULT NULL,
-                         created_at datetime(6) DEFAULT NULL
+                         created_at datetime(6) DEFAULT NULL,
+                         student_count int DEFAULT 0
 );
 alter table classes add foreign key (teacher_id) references users(id);
 
 CREATE TABLE IF NOT EXISTS attendances (
                                attendance_id bigint primary key auto_increment,
                                class_id bigint DEFAULT NULL,
-                               teacher_id bigint DEFAULT NULL,
                                datetime datetime(6) DEFAULT NULL
 );
-alter table attendances add foreign key (teacher_id) references users(id);
 alter table attendances add foreign key (class_id) references classes(class_id);
 
 CREATE TABLE IF NOT EXISTS student_class (
                         student_class_id bigint primary key auto_increment,
                         class_id bigint DEFAULT NULL,
                         student_id bigint DEFAULT NULL,
-                        attendance int DEFAULT NULL,
-                        score int DEFAULT NULL
+                        attendance int DEFAULT 0
 );
 alter table student_class add foreign key (class_id) references classes(class_id);
 alter table student_class add foreign key (student_id) references users(id);

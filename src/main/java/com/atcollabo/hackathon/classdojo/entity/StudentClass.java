@@ -17,15 +17,10 @@ public class StudentClass {
     @JoinColumn(name = "STUDENT_ID")
     private User student;
 
-    @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "CLASS_ID")
     private Class _class;
 
-/*
-    @Column(name = "SCORE")
-    private int score;
- */ // Changed to attendanceScore
-
-    @Column(name = "SCORE")
-    private int attendanceScore;
+    @Column(name = "ATTENDANCE")
+    private int attendance;
 }

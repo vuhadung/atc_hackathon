@@ -41,4 +41,7 @@ public class Class {
     @Enumerated(EnumType.STRING)
     private ClassStatus status;
 
+    @Column(name = "STUDENT_COUNT")
+    private int studentCount;
+
 }

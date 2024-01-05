@@ -19,10 +19,6 @@ public class Attendance {
     @JoinColumn(name = "CLASS_ID")
     private Class _class;
 
-    @ManyToOne
-    @JoinColumn(name = "TEACHER_ID")
-    private User teacher;
-
     @Column(name = "DATETIME")
     private LocalDateTime datetime;
 }
