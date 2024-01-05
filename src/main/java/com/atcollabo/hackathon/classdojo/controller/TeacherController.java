@@ -1,5 +1,7 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
+import com.atcollabo.hackathon.classdojo.dto.StudentDto;
+import com.atcollabo.hackathon.classdojo.dto.StudentIndexDto;
 import com.atcollabo.hackathon.classdojo.dto.TeacherClassDto;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
@@ -35,8 +37,8 @@ public class TeacherController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherUsername = authentication.getName();
         // Call the service method to get the classes for the teacher
-
         User teacher = userService.findOne(teacherUsername);
+
         List<Class> allClassesByTeacherId = teacherService.findAllClassesByTeacherId(teacher.getId());
         List<TeacherClassDto> teacherClassDtos = new ArrayList<>();
 
@@ -48,8 +50,25 @@ public class TeacherController {
     }
 
     @GetMapping(value = "teacher/classes/{classId}/students")
-    public ResponseEntity<List<StudentClass>> getStudentsInClass(@PathVariable("classId") Long classId) {
-        List<StudentClass> studentClassList = teacherService.findAllStudentForClass(classId);
-        return ResponseEntity.status(HttpStatus.OK).body(studentClassList);
+    public ResponseEntity<StudentIndexDto> getStudentsInClass(@PathVariable("classId") Long classId) {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherUsername = authentication.getName();
+        // Call the service method to get the classes for the teacher
+        User teacher = userService.findOne(teacherUsername);
+
+        if (!teacherService.checkIfTeacherTeachesClass(teacher.getId(), classId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        List<StudentClass> studentList = teacherService.findAllStudentForClass(classId);
+        List<StudentDto> studentDtoList = new ArrayList<>();
+        int numClassSessions = teacherService.getTotalClassSessions(classId);
+
+        for (StudentClass studentClass : studentList) {
+            studentDtoList.add(new StudentDto(studentClass));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new StudentIndexDto(numClassSessions, studentDtoList));
     }
 }

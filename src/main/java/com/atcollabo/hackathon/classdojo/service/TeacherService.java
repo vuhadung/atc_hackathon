@@ -9,4 +9,8 @@ public interface TeacherService {
 
     List<Class> findAllClassesByTeacherId(Long teacherId);
     List<StudentClass> findAllStudentForClass(Long classId);
+
+    boolean checkIfTeacherTeachesClass(Long teacherId, Long classId);
+
+    int getTotalClassSessions(Long classId);
 }
