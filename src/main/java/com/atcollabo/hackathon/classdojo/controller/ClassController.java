@@ -1,6 +1,7 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
-import com.atcollabo.hackathon.classdojo.dto.ClassDTO;
+import com.atcollabo.hackathon.classdojo.dto.CreateClassRequest;
+import com.atcollabo.hackathon.classdojo.dto.CreateClassResponse;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.ClassStatus;
 import com.atcollabo.hackathon.classdojo.entity.User;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
-import java.security.SecureRandom;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,7 +31,7 @@ public class ClassController {
     // sau khi bấm submit, sẽ lấy thông tin để tạo class
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping(value = "/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createClass(@Valid @RequestBody ClassDTO classDto) {
+    public ResponseEntity<?> createClass(@Valid @RequestBody CreateClassRequest createClassRequest) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User teacher = userService.findOne(auth.getName());
@@ -40,13 +40,20 @@ public class ClassController {
         Class _class = new Class();
         _class.setTeacher(teacher);
 
-        _class.setTitle(classDto.getTitle());
+        _class.setTitle(createClassRequest.getTitle());
         _class.setCode(randomCode);
 
         _class.setCreatedAt(LocalDateTime.now());
         _class.setStatus(ClassStatus.active);
         classService.save(_class);
-        return ResponseEntity.status(HttpStatus.OK).body(_class);
+
+        CreateClassResponse response = new CreateClassResponse();
+        response.setClassId(_class.getId()).setTeacherId(_class.getTeacher().getId())
+                .setTitle(_class.getTitle()).setCode(_class.getCode())
+                .setCreatedAt(_class.getCreatedAt().toString())
+                .setStatus(_class.getStatus().name()).setStudentCount(_class.getStudentCount());
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
 }
