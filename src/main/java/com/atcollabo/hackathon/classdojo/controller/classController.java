@@ -29,11 +29,6 @@ public class classController {
   private final UserService userService;
   private final ClassService classService;
 
-
-
-
-
-
     // Ký tự có thể sử dụng để tạo mã code
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
