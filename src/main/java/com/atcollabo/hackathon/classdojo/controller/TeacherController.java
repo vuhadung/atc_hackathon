@@ -1,5 +1,6 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
+import com.atcollabo.hackathon.classdojo.dto.CheckAttendaceDto;
 import com.atcollabo.hackathon.classdojo.dto.StudentDto;
 import com.atcollabo.hackathon.classdojo.dto.StudentIndexDto;
 import com.atcollabo.hackathon.classdojo.dto.TeacherClassDto;
@@ -15,10 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,4 +71,23 @@ public class TeacherController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new StudentIndexDto(numClassSessions, studentDtoList));
     }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping(value = "teachers/classes/attendance", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> checkAttendance(@RequestBody CheckAttendaceDto checkAttendaceDto) {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherUsername = authentication.getName();
+        // Call the service method to get the classes for the teacher
+        User teacher = userService.findOne(teacherUsername);
+
+        if (!teacherService.checkIfTeacherTeachesClass(teacher.getId(), checkAttendaceDto.getClassId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        teacherService.checkAttendance(checkAttendaceDto.getClassId(), checkAttendaceDto.getPresentStudentIds());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Attendance recorded");
+    }
+
 }

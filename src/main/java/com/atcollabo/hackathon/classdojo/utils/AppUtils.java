@@ -7,7 +7,7 @@ public class AppUtils {
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     // Độ dài của mã code
-    private static final int CODE_LENGTH = 8;
+    private static final int CODE_LENGTH = 5;
 
     public static String generateRandomCode() {
         SecureRandom random = new SecureRandom();

@@ -5,6 +5,7 @@ import com.atcollabo.hackathon.classdojo.entity.Class;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.LongStream;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class TeacherRepository {
     private final EntityManager em;
     
@@ -67,7 +69,7 @@ public class TeacherRepository {
                 .getResultList().size();
     }
 
-    public void checkAttendance(Long classId, List<Long> presentStudentIds) {
+    public Long checkAttendance(Long classId, List<Long> presentStudentIds) {
         Attendance attendance = new Attendance();
         attendance.set_class(em.find(Class.class, classId));
         attendance.setDatetime(LocalDateTime.now());
@@ -95,13 +97,24 @@ public class TeacherRepository {
         // filter out students who are absent
         List<Long> absentStudentIds = studentIds.stream().filter(studentId -> !presentStudentIds.contains(studentId)).toList();
         // check attendance for each student who is absent in class
-        for (Long studentId : presentStudentIds) {
+        for (Long studentId : absentStudentIds) {
             StudentAttendance studentAttendance = new StudentAttendance();
             studentAttendance.setAttendanceActivity(attendance);
             studentAttendance.setStudent(em.find(User.class, studentId));
             studentAttendance.setPresent(false);
             em.persist(studentAttendance);
         }
+        return attendance.getId();
+    }
 
+    public List<StudentAttendance> getAttendanceRecords(Long attendanceId) {
+        return em.createQuery(
+                "SELECT sa " +
+                        "FROM StudentAttendance sa " +
+                        "WHERE sa.attendanceActivity.id = :attendanceId",
+                        StudentAttendance.class
+                )
+                .setParameter("attendanceId", attendanceId)
+                .getResultList();
     }
 }
