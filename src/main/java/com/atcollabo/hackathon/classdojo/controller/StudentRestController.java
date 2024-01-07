@@ -5,6 +5,7 @@ import com.atcollabo.hackathon.classdojo.dto.StudentResponseDTO;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
+import com.atcollabo.hackathon.classdojo.service.ClassService;
 import com.atcollabo.hackathon.classdojo.service.StudentService;
 import com.atcollabo.hackathon.classdojo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,14 @@ public class StudentRestController {
     private StudentService studentService;
 
     private UserService userService;
+    private ClassService classService;
 
     // Constructor Injection
     @Autowired
-    public StudentRestController(StudentService studentService, UserService userService) {
+    public StudentRestController(StudentService studentService, UserService userService, ClassService classService) {
         this.studentService = studentService;
         this.userService = userService;
+        this.classService = classService;
     }
 
     //? Join a class by class code
@@ -78,7 +81,7 @@ public class StudentRestController {
 
     }
 
-    private static StudentResponseDTO mappedClassToDto(Class joinedClass) {
+    private StudentResponseDTO mappedClassToDto(Class joinedClass) {
         StudentResponseDTO studentResponseDTO = new StudentResponseDTO();
         studentResponseDTO.setClassId(joinedClass.getId());
         studentResponseDTO.setTeacherId(joinedClass.getTeacher().getId());
@@ -86,6 +89,14 @@ public class StudentRestController {
         studentResponseDTO.setCode(joinedClass.getCode());
         studentResponseDTO.setTeacherFullName(joinedClass.getTeacher().getFullName());
         studentResponseDTO.setStatus(joinedClass.getStatus());
+
+        int studentCount = joinedClass.getStudentCount();
+
+        joinedClass.setStudentCount(studentCount + 1);
+        classService.save(joinedClass);
+
+        studentResponseDTO.setStudentCount(joinedClass.getStudentCount());
+
         return studentResponseDTO;
     }
 }

@@ -12,5 +12,6 @@ public class StudentResponseDTO {
     private String teacherFullName;
     private String code;
     private ClassStatus status;
+    private int studentCount;
 
 }
