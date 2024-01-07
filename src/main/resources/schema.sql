@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS classes (
                          class_id bigint primary key auto_increment,
                          teacher_id bigint DEFAULT NULL,
                          title varchar(255) DEFAULT NULL,
-                         code varchar(10) DEFAULT NULL,
+                         code varchar(5) DEFAULT NULL,
                          status enum('active','inactive') DEFAULT NULL,
                          created_at datetime(6) DEFAULT NULL,
                          student_count int DEFAULT 0

@@ -30,7 +30,7 @@ public class TeacherController {
     private final UserService userService;
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value="/teachers/classes")
+    @GetMapping(value="/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TeacherClassDto>> getClassesForTeacher(@RequestParam(defaultValue = "10") int limit,
                                                   @RequestParam(defaultValue = "0") int offset){
         // Get the authenticated user
@@ -49,7 +49,8 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body(teacherClassDtos);
     }
 
-    @GetMapping(value = "teacher/classes/{classId}/students")
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping(value = "teachers/classes/{classId}/students", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentIndexDto> getStudentsInClass(@PathVariable("classId") Long classId) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -18,4 +18,20 @@ class TeacherRepositoryTest {
         assertEquals(6, totalClassSessions);
     }
 
+    @Test
+    void findAllClassesByTeacherId() {
+    }
+
+    @Test
+    void findAllStudentInClass() {
+    }
+
+    @Test
+    void checkIfTeacherTeachesClass() {
+    }
+
+    @Test
+    void checkAttendance() {
+        teacherRepository.checkAttendance(5L, null);
+    }
 }

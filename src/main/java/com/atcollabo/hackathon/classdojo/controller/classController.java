@@ -1,6 +1,7 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
-import com.atcollabo.hackathon.classdojo.dto.ClassDTO;
+import com.atcollabo.hackathon.classdojo.dto.ClassRequestDto;
+import com.atcollabo.hackathon.classdojo.dto.ClassResponseDto;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.ClassStatus;
 import com.atcollabo.hackathon.classdojo.entity.User;
@@ -14,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,7 +37,7 @@ public class classController {
     private static final String ALLOWED_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     // Độ dài của mã code
-    private static final int CODE_LENGTH = 8;
+    private static final int CODE_LENGTH = 5;
 
     public static String generateRandomCode() {
       SecureRandom random = new SecureRandom();
@@ -63,22 +62,29 @@ public class classController {
   // sau khi bấm submit, sẽ lấy thông tin để tạo class
   @PreAuthorize("hasRole('TEACHER')")
   @PostMapping(value = "/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<?> createClass(@Valid @RequestBody ClassDTO classDto) {
+  public ResponseEntity<?> createClass(@Valid @RequestBody ClassRequestDto classRequestDto) {
 
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     User teacher = userService.findOne(auth.getName());
     String randomCode = generateRandomCode();
 
     Class _class = new Class();
+
     _class.setTeacher(teacher);
 
-    _class.setTitle(classDto.getTitle());
-   _class.setCode(randomCode);
+    _class.setTitle(classRequestDto.getTitle());
+
+    _class.setCode(randomCode);
 
     _class.setCreatedAt(LocalDateTime.now());
+
     _class.setStatus(ClassStatus.active);
+
+    _class.setStudentCount(0);
+
     classService.save(_class);
-    return ResponseEntity.status(HttpStatus.OK).body(_class);
+
+    return ResponseEntity.status(HttpStatus.OK).body(new ClassResponseDto(_class));
 
 
   }

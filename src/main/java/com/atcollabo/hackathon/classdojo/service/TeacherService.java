@@ -13,4 +13,5 @@ public interface TeacherService {
     boolean checkIfTeacherTeachesClass(Long teacherId, Long classId);
 
     int getTotalClassSessions(Long classId);
+    void checkAttendance(Long classId, List<Long> presentStudentIds);
 }

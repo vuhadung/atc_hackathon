@@ -34,4 +34,9 @@ public class TeacherServiceImpl implements TeacherService {
     public int getTotalClassSessions(Long classId) {
         return teacherRepository.getTotalClassSessions(classId);
     }
+
+    @Override
+    public void checkAttendance(Long classId, List<Long> presentStudentIds) {
+        teacherRepository.checkAttendance(classId, presentStudentIds);
+    }
 }
