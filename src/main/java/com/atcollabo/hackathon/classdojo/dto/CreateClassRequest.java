@@ -6,7 +6,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 
 @Getter @Setter
-public class ClassRequestDto {
+public class CreateClassRequest {
     @NotEmpty(message = "class title is required.")
     private String title;
 
