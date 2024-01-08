@@ -20,8 +20,8 @@ import java.util.Set;
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private final UserDao userDao;
+    private final RoleDao roleDao;
 
     @Autowired
     public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
@@ -65,7 +65,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         });
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
-                authorities);
+        // will be store in authentication.getPrincipal()
+        UserInfo userInfo = new UserInfo(user.getUsername(), user.getPassword(), authorities);
+        userInfo.fullName(user.getFullName()).email(user.getEmail()).phoneNumber(user.getPhone_number());
+        return userInfo;
     }
 }

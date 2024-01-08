@@ -16,4 +16,9 @@ public class ClassService {
         classDao.save(_class);
         return _class.getId();
     }
+
+    public void delete(Long id) {
+        classDao.delete(id);
+    }
+
 }

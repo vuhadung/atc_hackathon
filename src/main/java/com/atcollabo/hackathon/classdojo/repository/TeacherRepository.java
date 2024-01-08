@@ -19,7 +19,7 @@ public class TeacherRepository {
         return em.createQuery(
                 "select c " +
                         "from Class c " +
-                        "where c.teacher.id = :teacherId and c.status='active'",
+                        "where c.teacher.id = :teacherId",
                         Class.class
                 )
                 .setParameter("teacherId", teacherId)
