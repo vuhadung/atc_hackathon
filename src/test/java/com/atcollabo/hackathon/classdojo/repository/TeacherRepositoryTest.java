@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,10 +53,13 @@ class TeacherRepositoryTest {
         List<Long> presentStudentIds = List.of(1L, 2L); // replace with the ids of existing students
         List<Long> absentStudentIds = List.of(3L, 4L); // replace with the ids of existing students
 
-        studentService.joinClass(1L, "Uq3dT");
-        studentService.joinClass(2L, "Uq3dT");
-        studentService.joinClass(3L, "Uq3dT");
-        studentService.joinClass(4L, "Uq3dT");
+        List<StudentClass> studentsInClass = new ArrayList<>();
+
+        for (Long studentId = 1L; studentId < 5; studentId++) {
+            StudentClass studentInClass = studentService.joinClass(studentId, "Uq3dT");
+            studentsInClass.add(studentInClass);
+        }
+
 
         // Call the checkAttendance method
         Long attendanceId = teacherRepository.checkAttendance(classId, presentStudentIds);
@@ -71,10 +75,11 @@ class TeacherRepositoryTest {
             Long studentId = attendanceRecord.getStudent().getId();
             boolean isPresent = presentStudentIds.contains(studentId);
             boolean isAbsent = absentStudentIds.contains(studentId);
-
+            StudentClass studentInClass = studentsInClass.get(studentId.intValue() - 1);
             assertTrue(isPresent || isAbsent, "Student should be either present or absent");
             if (isPresent) {
                 assertTrue(attendanceRecord.isPresent(), "Present student should have present attendance record");
+                assertEquals(1,studentInClass.getAttendance(), "Student should have 1 attendance");
             } else {
                 assertFalse(attendanceRecord.isPresent(), "Absent student should have absent attendance record");
             }

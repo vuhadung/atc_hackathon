@@ -77,10 +77,18 @@ public class TeacherRepository {
         // check attendance for each student who is present in class
         for (Long studentId : presentStudentIds) {
             StudentAttendance studentAttendance = new StudentAttendance();
+            User student = em.find(User.class, studentId);
+
             studentAttendance.setAttendanceActivity(attendance);
-            studentAttendance.setStudent(em.find(User.class, studentId));
+            studentAttendance.setStudent(student);
             studentAttendance.setPresent(true);
+
             em.persist(studentAttendance);
+            StudentClass studentClass = em.createQuery("select sc from StudentClass sc where sc.student.id = :studentId and sc._class.id = :classId", StudentClass.class)
+                    .setParameter("studentId", studentId)
+                    .setParameter("classId", classId)
+                    .getSingleResult();
+            studentClass.setAttendance(studentClass.getAttendance() + 1);
         }
 
         // check attendance for each student who is absent in class
