@@ -29,7 +29,7 @@ public class TeacherController {
     private final UserService userService;
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value="/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value="/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TeacherClassDto>> getClassesForTeacher(@RequestParam(defaultValue = "10") int limit,
                                                   @RequestParam(defaultValue = "0") int offset){
         // Get the authenticated user
@@ -49,7 +49,7 @@ public class TeacherController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value = "teachers/classes/{classId}/students", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "teachers/classes/{classId}/students", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentIndexDto> getStudentsInClass(@PathVariable("classId") Long classId) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -73,7 +73,7 @@ public class TeacherController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value = "teachers/classes/attendance", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "teachers/classes/attendance", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> checkAttendance(@RequestBody CheckAttendaceDto checkAttendaceDto) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
