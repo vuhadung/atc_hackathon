@@ -2,7 +2,9 @@ package com.atcollabo.hackathon.classdojo.controller;
 
 import com.atcollabo.hackathon.classdojo.dto.LoginRequest;
 import com.atcollabo.hackathon.classdojo.dto.UserDto;
+import com.atcollabo.hackathon.classdojo.dto.UserResponseDTO;
 import com.atcollabo.hackathon.classdojo.entity.User;
+import com.atcollabo.hackathon.classdojo.entity.UserInfo;
 import com.atcollabo.hackathon.classdojo.security.TokenProvider;
 import com.atcollabo.hackathon.classdojo.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,12 +37,15 @@ public class UserController {
     private TokenProvider jwtTokenUtil;
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> generateToken(@Valid @RequestBody LoginRequest loginUser) throws AuthenticationException {
+    public ResponseEntity<UserResponseDTO> generateToken(@Valid @RequestBody LoginRequest loginUser) throws AuthenticationException {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginUser.getUsername(), loginUser.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserInfo userInfo = (UserInfo) authentication.getPrincipal();
         final String token = jwtTokenUtil.generateToken(authentication);
-        return ResponseEntity.status(HttpStatus.OK).body(token);
+        UserResponseDTO userResponseDTO = new UserResponseDTO(userInfo, token);
+        return ResponseEntity.status(HttpStatus.OK).body(userResponseDTO);
     }
 
     @PostMapping(value = "/student/register", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

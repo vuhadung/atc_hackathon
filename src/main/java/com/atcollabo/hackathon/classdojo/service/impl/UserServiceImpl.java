@@ -20,8 +20,8 @@ import java.util.Set;
 @Service(value = "userService")
 public class UserServiceImpl implements UserDetailsService, UserService {
 
-    private UserDao userDao;
-    private RoleDao roleDao;
+    private final UserDao userDao;
+    private final RoleDao roleDao;
 
     @Autowired
     public UserServiceImpl(UserDao userDao, RoleDao roleDao) {
