@@ -14,4 +14,5 @@ public interface TeacherService {
 
     int getTotalClassSessions(Long classId);
     void checkAttendance(Long classId, List<Long> presentStudentIds);
+    void changeClassroomStatus(Long classId, String status);
 }

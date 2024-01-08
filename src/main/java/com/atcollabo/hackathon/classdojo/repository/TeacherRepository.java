@@ -125,4 +125,14 @@ public class TeacherRepository {
                 .setParameter("attendanceId", attendanceId)
                 .getResultList();
     }
+
+    public void changeClassroomStatus(Long classId, ClassStatus status) {
+        Class _class = em.find(Class.class, classId);
+        _class.setStatus(status);
+        em.merge(_class);
+    }
+
+    public Class findClassById(Long classId) {
+        return em.find(Class.class, classId);
+    }
 }

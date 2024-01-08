@@ -85,4 +85,14 @@ class TeacherRepositoryTest {
             }
         }
     }
+
+    @Test
+    void changeClassroomStatus() {
+        Long classId = 1L; // replace with the id of an existing class
+        ClassStatus status = ClassStatus.inactive; // replace with either "active" or "inactive"
+
+        teacherRepository.changeClassroomStatus(classId, status);
+        Class _class = teacherRepository.findClassById(classId);
+        assertEquals(status, _class.getStatus());
+    }
 }

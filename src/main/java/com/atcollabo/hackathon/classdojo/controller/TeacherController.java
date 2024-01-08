@@ -90,4 +90,22 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body("Attendance recorded");
     }
 
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping(value = "/teachers/classes/{classId}/status")
+    public ResponseEntity<String> changeClassroomStatus(@PathVariable("classId") Long classId, @RequestBody String status) {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherUsername = authentication.getName();
+        // Call the service method to get the classes for the teacher
+        User teacher = userService.findOne(teacherUsername);
+
+        if (!teacherService.checkIfTeacherTeachesClass(teacher.getId(), classId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        teacherService.changeClassroomStatus(classId, status);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Classroom status changed");
+    }
+
 }
