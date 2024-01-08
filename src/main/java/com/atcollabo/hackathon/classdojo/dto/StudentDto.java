@@ -17,8 +17,6 @@ public class StudentDto {
 
     private float attendanceRate;
 
-    private int totalClassSessions;
-
     public StudentDto(StudentClass studentClass) {
         this.studentId = studentClass.getStudent().getId();
         this.classId = studentClass.get_class().getId();

@@ -1,5 +1,6 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
+import com.atcollabo.hackathon.classdojo.dto.CheckAttendaceDto;
 import com.atcollabo.hackathon.classdojo.dto.StudentDto;
 import com.atcollabo.hackathon.classdojo.dto.StudentIndexDto;
 import com.atcollabo.hackathon.classdojo.dto.TeacherClassDto;
@@ -10,14 +11,12 @@ import com.atcollabo.hackathon.classdojo.service.TeacherService;
 import com.atcollabo.hackathon.classdojo.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class TeacherController {
     private final UserService userService;
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value="/teachers/classes")
+    @GetMapping(value="/teachers/classes", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TeacherClassDto>> getClassesForTeacher(@RequestParam(defaultValue = "10") int limit,
                                                   @RequestParam(defaultValue = "0") int offset){
         // Get the authenticated user
@@ -49,7 +48,8 @@ public class TeacherController {
         return ResponseEntity.status(HttpStatus.OK).body(teacherClassDtos);
     }
 
-    @GetMapping(value = "teacher/classes/{classId}/students")
+    @PreAuthorize("hasRole('TEACHER')")
+    @GetMapping(value = "teachers/classes/{classId}/students", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StudentIndexDto> getStudentsInClass(@PathVariable("classId") Long classId) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -71,4 +71,41 @@ public class TeacherController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new StudentIndexDto(numClassSessions, studentDtoList));
     }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping(value = "teachers/classes/attendance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> checkAttendance(@RequestBody CheckAttendaceDto checkAttendaceDto) {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherUsername = authentication.getName();
+        // Call the service method to get the classes for the teacher
+        User teacher = userService.findOne(teacherUsername);
+
+        if (!teacherService.checkIfTeacherTeachesClass(teacher.getId(), checkAttendaceDto.getClassId())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        teacherService.checkAttendance(checkAttendaceDto.getClassId(), checkAttendaceDto.getPresentStudentIds());
+
+        return ResponseEntity.status(HttpStatus.OK).body("Attendance recorded");
+    }
+
+    @PreAuthorize("hasRole('TEACHER')")
+    @PostMapping(value = "/teachers/classes/{classId}/status")
+    public ResponseEntity<String> changeClassroomStatus(@PathVariable("classId") Long classId, @RequestBody String status) {
+        // Get the authenticated user
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String teacherUsername = authentication.getName();
+        // Call the service method to get the classes for the teacher
+        User teacher = userService.findOne(teacherUsername);
+
+        if (!teacherService.checkIfTeacherTeachesClass(teacher.getId(), classId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        teacherService.changeClassroomStatus(classId, status);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Classroom status changed");
+    }
+
 }
