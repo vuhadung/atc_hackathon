@@ -73,7 +73,7 @@ public class TeacherController {
     }
 
     @PreAuthorize("hasRole('TEACHER')")
-    @GetMapping(value = "teachers/classes/attendance", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "teachers/classes/attendance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> checkAttendance(@RequestBody CheckAttendaceDto checkAttendaceDto) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
