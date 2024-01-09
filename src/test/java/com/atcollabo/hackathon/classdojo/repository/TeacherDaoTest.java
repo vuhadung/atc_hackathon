@@ -1,19 +1,16 @@
 package com.atcollabo.hackathon.classdojo.repository;
 
-import com.atcollabo.hackathon.classdojo.dao.StudentClassDAO;
-import com.atcollabo.hackathon.classdojo.dao.StudentDao;
+import com.atcollabo.hackathon.classdojo.dao.TeacherDao;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.ClassStatus;
 import com.atcollabo.hackathon.classdojo.entity.StudentAttendance;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.service.StudentService;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,15 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-class TeacherRepositoryTest {
+class TeacherDaoTest {
 
-    @Autowired private TeacherRepository teacherRepository;
+    @Autowired private TeacherDao teacherDao;
     @Autowired private StudentService studentService;
 
 
     @Test
     void getTotalClassSessions() {
-        int totalClassSessions = teacherRepository.getTotalClassSessions(5L);
+        int totalClassSessions = teacherDao.getTotalClassSessions(5L);
         assertEquals(6, totalClassSessions);
     }
 
@@ -62,13 +59,13 @@ class TeacherRepositoryTest {
 
 
         // Call the checkAttendance method
-        Long attendanceId = teacherRepository.checkAttendance(classId, presentStudentIds);
-        List<StudentAttendance> attendanceRecords = teacherRepository.getAttendanceRecords(attendanceId);
+        Long attendanceId = teacherDao.checkAttendance(classId, presentStudentIds);
+        List<StudentAttendance> attendanceRecords = teacherDao.getAttendanceRecords(attendanceId);
         assertEquals(4, attendanceRecords.size(), "There should be 4 attendance records");
 
 
         // Verify that the attendance records were created correctly
-        List<StudentClass> studentClasses = teacherRepository.findAllStudentInClass(classId);
+        List<StudentClass> studentClasses = teacherDao.findAllStudentInClass(classId);
         assertEquals(4, studentClasses.size(), "The classroom should have 4 students");
 
         for (StudentAttendance attendanceRecord : attendanceRecords) {
@@ -91,8 +88,8 @@ class TeacherRepositoryTest {
         Long classId = 1L; // replace with the id of an existing class
         ClassStatus status = ClassStatus.inactive; // replace with either "active" or "inactive"
 
-        teacherRepository.changeClassroomStatus(classId, status);
-        Class _class = teacherRepository.findClassById(classId);
+        teacherDao.changeClassroomStatus(classId, status);
+        Class _class = teacherDao.findClassById(classId);
         assertEquals(status, _class.getStatus());
     }
 }

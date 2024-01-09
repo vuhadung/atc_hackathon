@@ -1,7 +1,6 @@
 package com.atcollabo.hackathon.classdojo.service;
 
 import com.atcollabo.hackathon.classdojo.entity.Class;
-import com.atcollabo.hackathon.classdojo.repository.TeacherRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

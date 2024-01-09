@@ -3,7 +3,7 @@ package com.atcollabo.hackathon.classdojo.service.impl;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.ClassStatus;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
-import com.atcollabo.hackathon.classdojo.repository.TeacherRepository;
+import com.atcollabo.hackathon.classdojo.dao.TeacherDao;
 import com.atcollabo.hackathon.classdojo.service.TeacherService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,37 +15,37 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
 
-    private final TeacherRepository teacherRepository;
+    private final TeacherDao teacherDao;
 
     @Override
     public List<Class> findAllClassesByTeacherId(Long teacherId) {
-        return teacherRepository.findAllClassesByTeacherId(teacherId);
+        return teacherDao.findAllClassesByTeacherId(teacherId);
     }
 
     @Override
     public List<StudentClass> findAllStudentForClass(Long classId) {
-        return teacherRepository.findAllStudentInClass(classId);
+        return teacherDao.findAllStudentInClass(classId);
     }
 
     @Override
     public boolean checkIfTeacherTeachesClass(Long teacherId, Long classId) {
-        return teacherRepository.checkIfTeacherTeachesClass(teacherId, classId);
+        return teacherDao.checkIfTeacherTeachesClass(teacherId, classId);
     }
 
     @Override
     public int getTotalClassSessions(Long classId) {
-        return teacherRepository.getTotalClassSessions(classId);
+        return teacherDao.getTotalClassSessions(classId);
     }
 
     @Override
     public void checkAttendance(Long classId, List<Long> presentStudentIds) {
-        teacherRepository.checkAttendance(classId, presentStudentIds);
+        teacherDao.checkAttendance(classId, presentStudentIds);
     }
 
     @Override
     public void changeClassroomStatus(Long classId, String status) {
         ClassStatus classStatus = Objects.equals(status, "active") ? ClassStatus.active : ClassStatus.inactive;
 
-        teacherRepository.changeClassroomStatus(classId, classStatus);
+        teacherDao.changeClassroomStatus(classId, classStatus);
     }
 }
