@@ -56,6 +56,7 @@ public class TeacherRepository {
                 .getResultList().size() > 0;
     }
 
+    /*
     public int getTotalClassSessions(Long classId) {
 
         return em.createQuery(
@@ -67,6 +68,18 @@ public class TeacherRepository {
                 )
                 .setParameter("classId", classId)
                 .getResultList().size();
+    }
+     */ // getTotalClassSessions() are not working properly
+
+    public long getTotalClassSessions(Long classId) {
+        return em.createQuery(
+                        "SELECT count(a) " +
+                                "FROM Attendance a " +
+                                "WHERE a._class.id = :classId",
+                        Long.class
+                )
+                .setParameter("classId", classId)
+                .getSingleResult();
     }
 
     public Long checkAttendance(Long classId, List<Long> presentStudentIds) {

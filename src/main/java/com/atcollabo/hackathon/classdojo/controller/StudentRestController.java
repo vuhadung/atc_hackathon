@@ -1,5 +1,7 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
+import com.atcollabo.hackathon.classdojo.dto.StudentAttendanceRateByClassDto;
+import com.atcollabo.hackathon.classdojo.dto.StudentProfileDto;
 import com.atcollabo.hackathon.classdojo.dto.StudentRequestDTO;
 import com.atcollabo.hackathon.classdojo.dto.StudentResponseDTO;
 import com.atcollabo.hackathon.classdojo.entity.Class;
@@ -15,13 +17,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -39,6 +39,7 @@ public class StudentRestController {
         this.userService = userService;
         this.classService = classService;
     }
+
 
     //? Join a class by class code
     @PreAuthorize("hasRole('STUDENT')")
@@ -98,5 +99,50 @@ public class StudentRestController {
         studentResponseDTO.setStudentCount(joinedClass.getStudentCount());
 
         return studentResponseDTO;
+    }
+
+    //? View student profile
+    @PreAuthorize("hasRole('STUDENT')")
+    @GetMapping ("/students/{studentId}")
+    public ResponseEntity<StudentProfileDto> viewStudentProfile(@PathVariable Long studentId){
+        /*
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        User student = userService.findOne(userDetails.getUsername());
+        */ // if don't want to use the studentId from the path variable
+
+
+        User studentProfile = studentService.findOne(studentId);
+        HashMap<Class, Double> classesAttendanceRate = studentService.getClassesAttendanceRate(studentId);
+        double totalAttendanceRate = 0;
+
+
+
+        // map the studentProfile to StudentProfileDto
+        StudentProfileDto studentProfileDto = new StudentProfileDto();
+        studentProfileDto.setStudentId(studentProfile.getId());
+        studentProfileDto.setUsername(studentProfile.getUsername());
+        studentProfileDto.setFullName(studentProfile.getFullName());
+        studentProfileDto.setEmail(studentProfile.getEmail());
+        studentProfileDto.setPhoneNumber(studentProfile.getPhone_number());
+
+        List<StudentAttendanceRateByClassDto> classes = new ArrayList<>();
+        // map to StudentAttendanceRateByClassDto
+        for(Class _class: classesAttendanceRate.keySet()){
+            StudentAttendanceRateByClassDto dto = new StudentAttendanceRateByClassDto();
+            dto.setClassId(_class.getId());
+            dto.setTitle(_class.getTitle());
+            dto.setTeacherFullName(_class.getTeacher().getFullName());
+            dto.setAttendanceRate(classesAttendanceRate.get(_class));
+            classes.add(dto);
+            totalAttendanceRate += classesAttendanceRate.get(_class);
+        }
+        studentProfileDto.setClasses(classes);
+
+        studentProfileDto.setAvgAttendanceRate(totalAttendanceRate / classes.size());
+
+        // return the response DTO
+        return ResponseEntity.ok(studentProfileDto) ;
+
     }
 }
