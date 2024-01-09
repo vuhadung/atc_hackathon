@@ -27,7 +27,7 @@ class TeacherDaoTest {
 
     @Test
     void getTotalClassSessions() {
-        int totalClassSessions = teacherDao.getTotalClassSessions(5L);
+        int totalClassSessions = (int)teacherDao.getTotalClassSessions(5L);
         assertEquals(6, totalClassSessions);
     }
 

@@ -3,16 +3,17 @@ package com.atcollabo.hackathon.classdojo.service.impl;
 import com.atcollabo.hackathon.classdojo.dao.ClassDAO;
 import com.atcollabo.hackathon.classdojo.dao.StudentClassDAO;
 import com.atcollabo.hackathon.classdojo.dao.StudentDao;
+import com.atcollabo.hackathon.classdojo.dao.TeacherDao;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
 import com.atcollabo.hackathon.classdojo.service.UserService;
-import com.atcollabo.hackathon.classdojo.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -23,12 +24,18 @@ public class StudentServiceImpl implements com.atcollabo.hackathon.classdojo.ser
     private StudentClassDAO studentClassDAO;
     private ClassDAO classDAO;
 
+    private TeacherDao teacherDao;
+
     @Autowired
     public StudentServiceImpl(UserServiceImpl userService, StudentDao studentDao, StudentClassDAO studentClassDAO, ClassDAO classDAO) {
         this.userService = userService;
         this.studentDao = studentDao;
         this.studentClassDAO = studentClassDAO;
         this.classDAO = classDAO;
+    }
+    //? find a student by id
+    public User findOne(Long id) {
+        return studentDao.findOne(id);
     }
 
     //? Join a class by class code
@@ -70,6 +77,24 @@ public class StudentServiceImpl implements com.atcollabo.hackathon.classdojo.ser
         }
 
         return classes;
+    }
+
+    //? View student profile
+    public HashMap<Class, Double> getClassesAttendanceRate(Long studentID) {
+        HashMap<Class, Double> attendanceRates = new HashMap<>();
+        User user = studentDao.findOne(studentID);
+        for(StudentClass studentClass : user.getJoinedClasses()){
+            long totalClassSessions = teacherDao.getTotalClassSessions(studentClass.get_class().getId());
+            int totalAttendance = studentClass.getAttendance();
+            double attendanceRate = (double) totalAttendance / totalClassSessions;
+            if (totalClassSessions != 0){
+                attendanceRates.put(studentClass.get_class(), attendanceRate);
+            }else {
+                attendanceRates.put(studentClass.get_class(), 1.0);
+            }
+
+        }
+        return attendanceRates;
     }
 
 }

@@ -54,17 +54,15 @@ public class TeacherDao {
                 .getResultList().size() > 0;
     }
 
-    public int getTotalClassSessions(Long classId) {
-
+    public long getTotalClassSessions(Long classId) {
         return em.createQuery(
-                "SELECT FUNCTION('DATE', a.datetime) " +
-                        "FROM Attendance a " +
-                        "WHERE a._class.id = :classId " +
-                        "GROUP BY FUNCTION('DATE', a.datetime)",
-                        Attendance.class
+                        "SELECT count(a) " +
+                                "FROM Attendance a " +
+                                "WHERE a._class.id = :classId",
+                        Long.class
                 )
                 .setParameter("classId", classId)
-                .getResultList().size();
+                .getSingleResult();
     }
 
     public Long checkAttendance(Long classId, List<Long> presentStudentIds) {

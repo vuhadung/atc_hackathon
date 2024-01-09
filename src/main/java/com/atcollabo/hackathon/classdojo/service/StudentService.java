@@ -2,8 +2,10 @@ package com.atcollabo.hackathon.classdojo.service;
 
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
+import com.atcollabo.hackathon.classdojo.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface StudentService {
@@ -13,4 +15,5 @@ public interface StudentService {
 
     //? List all classes joined by a student
     List<Class> listAllClassesJoinedByStudent(Long studentID);
+    public HashMap<Class, Double> getClassesAttendanceRate(Long studentID);
 }

@@ -34,7 +34,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public int getTotalClassSessions(Long classId) {
-        return teacherDao.getTotalClassSessions(classId);
+        return (int)teacherDao.getTotalClassSessions(classId);
     }
 
     @Override
