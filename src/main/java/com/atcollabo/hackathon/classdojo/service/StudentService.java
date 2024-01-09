@@ -6,6 +6,7 @@ import com.atcollabo.hackathon.classdojo.dao.StudentDao;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
+import com.atcollabo.hackathon.classdojo.repository.TeacherRepository;
 import com.atcollabo.hackathon.classdojo.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -24,13 +26,20 @@ public class StudentService {
     private StudentDao studentDao;
     private StudentClassDAO studentClassDAO;
     private ClassDAO classDAO;
+    private TeacherRepository teacherRepository;
 
     @Autowired
-    public StudentService(UserServiceImpl userService, StudentDao studentDao, StudentClassDAO studentClassDAO, ClassDAO classDAO) {
+    public StudentService(UserServiceImpl userService, StudentDao studentDao, StudentClassDAO studentClassDAO, ClassDAO classDAO, TeacherRepository teacherRepository){
         this.userService = userService;
         this.studentDao = studentDao;
         this.studentClassDAO = studentClassDAO;
         this.classDAO = classDAO;
+        this.teacherRepository = teacherRepository;
+    }
+
+    //? find a student by id
+    public User findOne(Long id) {
+        return studentDao.findOne(id);
     }
 
     //? Join a class by class code
@@ -72,4 +81,21 @@ public class StudentService {
         return classes;
     }
 
+    //? View student profile
+    public HashMap<Class, Double> getClassesAttendanceRate(Long studentID) {
+        HashMap<Class, Double> attendanceRates = new HashMap<>();
+        User user = studentDao.findOne(studentID);
+        for(StudentClass studentClass : user.getJoinedClasses()){
+            long totalClassSessions = teacherRepository.getTotalClassSessions(studentClass.get_class().getId());
+            int totalAttendance = studentClass.getAttendance();
+            double attendanceRate = (double) totalAttendance / totalClassSessions;
+            if (totalClassSessions != 0){
+                attendanceRates.put(studentClass.get_class(), attendanceRate);
+            }else {
+                attendanceRates.put(studentClass.get_class(), 1.0);
+            }
+
+        }
+        return attendanceRates;
+    }
 }
