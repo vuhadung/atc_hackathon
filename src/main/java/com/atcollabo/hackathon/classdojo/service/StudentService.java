@@ -13,8 +13,8 @@ public interface StudentService {
     @Transactional(readOnly = false)
     StudentClass joinClass(Long studentID, String classCode);
 
-    public User findOne(Long id);
+    User findOne(Long id);
     //? List all classes joined by a student
     List<Class> listAllClassesJoinedByStudent(Long studentID);
-    public HashMap<Class, Double> getClassesAttendanceRate(Long studentID);
+    HashMap<Class, Double> getClassesAttendanceRate(Long studentID);
 }
