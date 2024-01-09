@@ -4,6 +4,9 @@ import com.atcollabo.hackathon.classdojo.entity.Class;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,6 +55,5 @@ public class ClassDAO {
         Class _class = entityManager.find(Class.class, id);
         entityManager.remove(_class);
     }
-
 
 }

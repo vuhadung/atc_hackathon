@@ -35,9 +35,9 @@ dependencies {
 	compileOnly 'javax.xml.bind:jaxb-api:2.1'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.1'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
-
 }
 
 tasks.named('test') {
