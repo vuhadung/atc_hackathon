@@ -7,5 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface ClassService {
-    public Long save(Class _class);
+    Long save(Class _class);
+
+    void delete(Long id);
+
 }
