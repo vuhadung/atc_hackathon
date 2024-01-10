@@ -102,7 +102,6 @@ public class StudentRestController {
     }
 
     //? View student profile
-    @PreAuthorize("hasRole('STUDENT')")
     @GetMapping ("/students/{studentId}")
     public ResponseEntity<StudentProfileDto> viewStudentProfile(@PathVariable Long studentId){
         /*
