@@ -1,9 +1,6 @@
 package com.atcollabo.hackathon.classdojo.controller;
 
-import com.atcollabo.hackathon.classdojo.dto.CheckAttendaceDto;
-import com.atcollabo.hackathon.classdojo.dto.StudentDto;
-import com.atcollabo.hackathon.classdojo.dto.StudentIndexDto;
-import com.atcollabo.hackathon.classdojo.dto.TeacherClassDto;
+import com.atcollabo.hackathon.classdojo.dto.*;
 import com.atcollabo.hackathon.classdojo.entity.Class;
 import com.atcollabo.hackathon.classdojo.entity.StudentClass;
 import com.atcollabo.hackathon.classdojo.entity.User;
@@ -92,7 +89,7 @@ public class TeacherController {
 
     @PreAuthorize("hasRole('TEACHER')")
     @PostMapping(value = "/teachers/classes/{classId}/status")
-    public ResponseEntity<String> changeClassroomStatus(@PathVariable("classId") Long classId, @RequestBody String status) {
+    public ResponseEntity<String> changeClassroomStatus(@PathVariable("classId") Long classId, @RequestBody StatusDto status) {
         // Get the authenticated user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String teacherUsername = authentication.getName();
@@ -103,7 +100,7 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
 
-        teacherService.changeClassroomStatus(classId, status);
+        teacherService.changeClassroomStatus(classId, status.getStatus());
 
         return ResponseEntity.status(HttpStatus.OK).body("Classroom status changed");
     }
