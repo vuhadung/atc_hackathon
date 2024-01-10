@@ -27,11 +27,12 @@ public class StudentServiceImpl implements com.atcollabo.hackathon.classdojo.ser
     private TeacherDao teacherDao;
 
     @Autowired
-    public StudentServiceImpl(UserServiceImpl userService, StudentDao studentDao, StudentClassDAO studentClassDAO, ClassDAO classDAO) {
+    public StudentServiceImpl(UserService userService, StudentDao studentDao, StudentClassDAO studentClassDAO, ClassDAO classDAO, TeacherDao teacherDao) {
         this.userService = userService;
         this.studentDao = studentDao;
         this.studentClassDAO = studentClassDAO;
         this.classDAO = classDAO;
+        this.teacherDao = teacherDao;
     }
     //? find a student by id
     public User findOne(Long id) {
@@ -84,7 +85,7 @@ public class StudentServiceImpl implements com.atcollabo.hackathon.classdojo.ser
         HashMap<Class, Double> attendanceRates = new HashMap<>();
         User user = studentDao.findOne(studentID);
         for(StudentClass studentClass : user.getJoinedClasses()){
-            long totalClassSessions = teacherDao.getTotalClassSessions(studentClass.get_class().getId());
+            long totalClassSessions = teacherDao.getTotalClassSessionsDW(studentClass.get_class().getId());
             int totalAttendance = studentClass.getAttendance();
             double attendanceRate = (double) totalAttendance / totalClassSessions;
             if (totalClassSessions != 0){

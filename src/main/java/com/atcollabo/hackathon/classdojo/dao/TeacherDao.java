@@ -131,4 +131,16 @@ public class TeacherDao {
     public Class findClassById(Long classId) {
         return em.find(Class.class, classId);
     }
+
+    //! GetTotalSessionDw
+    public long getTotalClassSessionsDW(Long classId) {
+        return em.createQuery(
+                        "SELECT count(a) " +
+                                "FROM Attendance a " +
+                                "WHERE a._class.id = :classId",
+                        Long.class
+                )
+                .setParameter("classId", classId)
+                .getSingleResult();
+    }
 }
